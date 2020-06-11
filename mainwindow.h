@@ -4,6 +4,8 @@
 #include<QMenuBar>
 #include<QDebug>
 
+#include "textview.h"
+
 #include<iostream>
 #include<vector>
 
@@ -12,13 +14,13 @@ class MainWindow : QMainWindow
 private:
     const QString & name;
     const QString defaultName ="";
-    QWidget * centralWidget;
+    TextView * centralWidget;
     struct menuActionS{
         QString name,statusTip;
         QKeySequence keySequence;
-        QFunctionPointer handler;
+        void (*handler) (const QString &);
         menuActionS(){}
-        menuActionS(QString name,QString statusTip,QKeySequence keySequence,QFunctionPointer handler){
+        menuActionS(QString name,QString statusTip,QKeySequence keySequence,void (*handler)(const QString &)){
             this->name=name;
             this->statusTip=statusTip;
             this->keySequence=keySequence;
@@ -27,19 +29,22 @@ private:
     };
 
     const std::vector<menuActionS> menuActions={
-        menuActionS("New","Create a new File",QKeySequence::New,[](){
+        menuActionS("New","Create a new File",QKeySequence::New,[](const QString &content){
             qInfo() << "New Pressed";
         }),
-        menuActionS("Open","Open a new File",QKeySequence::Open,[](){
+        menuActionS("Open","Open a new File",QKeySequence::Open,[](const QString &content){
             qInfo() << "Open Pressed";
         }),
-        menuActionS("Save","Save current File",QKeySequence::Save,[](){
+        menuActionS("Save","Save current File",QKeySequence::Save,[](const QString &content){
             qInfo() << "Save Pressed";
+            qInfo() << "Content: " << content;
+            //QFile file;
+            //file.
         })
     };
 public:
     MainWindow();
-    MainWindow(const QString & name,QWidget * centralWidget);
+    MainWindow(const QString & name,TextView * centralWidget);
 };
 
 #endif // MAINWINDOW_H

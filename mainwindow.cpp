@@ -5,7 +5,7 @@ MainWindow::MainWindow()
     this->centralWidget=nullptr;
     showMaximized();
 }
-MainWindow::MainWindow(const QString & name, QWidget * centralWidget)
+MainWindow::MainWindow(const QString & name, TextView * centralWidget)
     :name(name){
     this->centralWidget=centralWidget;
     this->setWindowTitle(name);
@@ -15,7 +15,10 @@ MainWindow::MainWindow(const QString & name, QWidget * centralWidget)
         auto action=menu->addAction(actionConf.name);
         action->setStatusTip(actionConf.statusTip);
         action->setShortcut(actionConf.keySequence);
-        connect(action,&QAction::triggered,this,actionConf.handler);
+        connect(action,&QAction::triggered,this,[actionConf,centralWidget](){
+            //get file content
+            actionConf.handler(QString(centralWidget->getPlainText()));
+        });
     }
     showMaximized();
 }

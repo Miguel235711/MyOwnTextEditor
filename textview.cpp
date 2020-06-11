@@ -1,7 +1,11 @@
 #include "textview.h"
 
+
 TextView::TextView()
 {
-    this->setLayout(this->mainLayout);
-    this->mainLayout->addWidget(new QLabel("HelloWorld"));
+    setLayout(mainLayout);
+    mainLayout->addWidget(codeEditor);
+}
+const QString TextView::getPlainText(){
+    return codeEditor->toPlainText();
 }
